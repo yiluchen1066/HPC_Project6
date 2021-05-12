@@ -33,7 +33,7 @@ void SubDomain::init(int mpi_rank, int mpi_size, Discretization& discretization)
     int dims[2] = { 0, 0 };
     // TODO determine the number of subdomains in the x and y dimensions using "MPI_Dims_create"  
     //create the dimensions of the decomposition depending on the number of ranks 
-    MPI_Dims_Create(mpi_size,2,dims);
+    MPI_Dims_Create(mpi_size, 2, dims);
  
     ndomy = dims[0];
     ndomx = dims[1];
@@ -48,7 +48,7 @@ void SubDomain::init(int mpi_rank, int mpi_size, Discretization& discretization)
     int coords[2];
     // TODO retrieve coordinates of the rank in the topology using "MPI_Cart_coords"
     // MPI_Cart_coords determins process corrds in catesian topology given rank in the group
-    MPI_Cart_coords(comm_cart, mpi_rank, 2, &coords); 
+    MPI_Cart_coords(comm_cart, mpi_rank, 2, coords); 
 
 
     domy = coords[0]+1;
