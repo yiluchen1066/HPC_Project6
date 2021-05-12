@@ -100,7 +100,7 @@ void diffusion(const data::Field &s, data::Field &f)
           buffW[j]=s(0,j); 
       }
       MPI_Isend(&buffW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[6]); 
-      MPI_Irecv(&bndW[0], ny, MPI_DOUBLE, domain.neighbour_weat, 0, domain.comm_cart, &request[7]); 
+      MPI_Irecv(&bndW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[7]); 
     }
 
     MPI_Waitall(8, request, status); 
