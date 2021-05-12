@@ -38,6 +38,9 @@ void diffusion(const data::Field &s, data::Field &f)
 
     using data::y_old;
 
+    MPI_Request request[8];
+    MPI_Status status[8];
+
     double alpha = options.alpha;
     double beta = options.beta;
 
@@ -50,18 +53,57 @@ void diffusion(const data::Field &s, data::Field &f)
     // try overlapping computation and communication
     // by using  MPI_Irecv and MPI_Isend.
     if(domain.neighbour_north>=0) {
-        // ...
+        // copy the north row to buffN
+        // send buffN to the neighbor (rank)
+        // receive to bndS 
+        // before you send the data, copy it to the send buffers (buffN, buffS, buffE, buffW), 
+        //and receive it in the ghost cells (bndN, bndS, bndE, bndW)
+        for (int i = 0; i < nx; i++)
+        {
+            buffN[i] = s(i,0); 
+        }
+        MPI_Isend(&buffN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[0]); 
+        MPI_Irecv(&bndN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[1]); 
     }
 
     if(domain.neighbour_south>=0) {
        // ...
+       // copy the south row to buffS
+       // send buffS to the neighbor 
+       //receive to bndS 
+       // before you send the data, copy it to the send buffers (buffN, buffS, buffE, buffW),
+       // and receive it in the ghost cells (bnS)
+       for (int i = 0; i < nx; i++)
+       {
+           buffS[i] = s(i, jend); 
+       }
+       MPI_Isend(&buffS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[2]); 
+       MPI_Irecv(&bndS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[3]); 
     }
+
     if(domain.neighbour_east>=0) {
       // ...
+      // copy the east column to buffE 
+      // send buffE to the neighbour 
+      for (int j = 0; j < ny; j++)
+      {
+          buffE[j] = s(iend,j); 
+      }
+      MPI_Isend(&buffE[0], ny, MPI_DOUBLE, domain.neighbour_east, 0, domain.comm_cart, &request[4]); 
+      MPI_Irecv(&bndE[0], ny, MPI_DOUBLE, domain.neighbour_east, 0, domain.comm_cart, &request[5]); 
     }
+
     if(domain.neighbour_west>=0) {
       // ...
+      for (int j = 0; j < ny; j++)
+      {
+          buffW[j]=s(0,j); 
+      }
+      MPI_Isend(&buffW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[6]); 
+      MPI_Irecv(&bndW[0], ny, MPI_DOUBLE, domain.neighbour_weat, 0, domain.comm_cart, &request[7]); 
     }
+
+    MPI_Waitall(8, request, status); 
 
     // the interior grid points
     for (int j=1; j < jend; j++) {

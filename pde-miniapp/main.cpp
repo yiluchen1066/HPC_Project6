@@ -139,6 +139,18 @@ int main(int argc, char* argv[])
     int mpi_rank, mpi_size, threadLevelProvided;
     // TODO initialize
     // use "MPI_Comm_size", "MPI_Comm_rank" and "MPI_Init_thread"
+    MPI_Init(&argc,&argv); 
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size); 
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &threadLevelProvided); // initialize the MPI execution environment
+
+    if (threadLevelProvided<MPI_THREAD_MULTIPLE)
+    {
+        printf("The threading support level is lesser than that demanded.\n"); 
+    } else
+    {
+        printf("The threading support level correponds to that demanded.\n")
+    }
 
     // initialize subdomain
     domain.init(mpi_rank, mpi_size, options);
@@ -301,6 +313,9 @@ int main(int argc, char* argv[])
         std::cout << "Goodbye!" << std::endl;
 
     // TODO finalize it using "MPI_Finalize" and "MPI_Comm_free"
+    MPI_Finalize(); 
+    MPI_Comm_free(MPI_COMM_WORLD);
+
 
     return 0;
 }
