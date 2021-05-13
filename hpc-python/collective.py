@@ -17,6 +17,6 @@ size = comm.Get_size()
 # using the fast (near C-speed), direct array data communication of buffer-provider objects: the method names starting with an upercase letter. 
 
 rankF = numpy.array(float(rank))
-sum = 0
+sum = numpy.zeros(1)
 comm.Allreduce(rankF, sum, op=MPI.SUM)
 print(f"The proecssor {rank}  computes the sum of all ranks is {sum}")
