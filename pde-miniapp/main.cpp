@@ -140,8 +140,8 @@ int main(int argc, char* argv[])
     // TODO initialize
     // use "MPI_Comm_size", "MPI_Comm_rank" and "MPI_Init_thread"
     MPI_Init(&argc,&argv); 
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size); 
+    MPI_Comm_rank(data::domain.comm_cart, &mpi_rank);
+    MPI_Comm_size(data::domain.comm_cart, &mpi_size); 
     MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &threadLevelProvided); // initialize the MPI execution environment
 
     if (threadLevelProvided<MPI_THREAD_MULTIPLE)
@@ -313,7 +313,7 @@ int main(int argc, char* argv[])
         std::cout << "Goodbye!" << std::endl;
 
     // TODO finalize it using "MPI_Finalize" and "MPI_Comm_free"
-    MPI_Comm_free( &MPI_COMM_WORLD);
+    MPI_Comm_free(& data::domain.com_cart);
     MPI_Finalize(); 
     return 0;
 }
