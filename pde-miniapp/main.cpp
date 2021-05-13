@@ -140,17 +140,18 @@ int main(int argc, char* argv[])
     // TODO initialize
     // use "MPI_Comm_size", "MPI_Comm_rank" and "MPI_Init_thread"
     MPI_Init(&argc,&argv); 
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &threadLevelProvided); // initialize the MPI execution environment
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size); 
-    MPI_Init_thread(NULL, NULL, MPI_THREAD_SERIALIZED, &threadLevelProvided); // initialize the MPI execution environment
+    
 
-    if (threadLevelProvided<MPI_THREAD_MULTIPLE)
-    {
-        printf("The threading support level is lesser than that demanded.\n"); 
-    } else
-    {
-        printf("The threading support level correponds to that demanded.\n"); 
-    }
+    //if (threadLevelProvided<MPI_THREAD_MULTIPLE)
+    //{
+    //   printf("The threading support level is lesser than that demanded.\n"); 
+    //} else
+    //{
+    //    printf("The threading support level correponds to that demanded.\n"); 
+    //}
 
     // initialize subdomain
     domain.init(mpi_rank, mpi_size, options);
