@@ -314,7 +314,7 @@ int main(int argc, char* argv[])
 
     // TODO finalize it using "MPI_Finalize" and "MPI_Comm_free"
     MPI_Finalize(); 
-    MPI_Comm_free(MPI_COMM_WORLD);
+    MPI_Comm_free(&MPI_COMM_WORLD);
 
 
     return 0;
