@@ -60,7 +60,7 @@ void diffusion(const data::Field &s, data::Field &f)
         //and receive it in the ghost cells (bndN, bndS, bndE, bndW)
         for (int i = 0; i < nx; i++)
         {
-            buffN[i] = s(i,0); 
+            buffN[i] = s(i,jend); 
         }
         MPI_Isend(&buffN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[count++]); 
         MPI_Irecv(&bndN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[count++]); 
@@ -75,7 +75,7 @@ void diffusion(const data::Field &s, data::Field &f)
        // and receive it in the ghost cells (bnS)
        for (int i = 0; i < nx; i++)
        {
-           buffS[i] = s(i, jend); 
+           buffS[i] = s(i, 0); 
        }
        MPI_Isend(&buffS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[count++]); 
        MPI_Irecv(&bndS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[count++]); 
