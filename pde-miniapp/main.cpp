@@ -313,7 +313,7 @@ int main(int argc, char* argv[])
         std::cout << "Goodbye!" << std::endl;
 
     // TODO finalize it using "MPI_Finalize" and "MPI_Comm_free"
-    MPI_Comm_free(& data::domain.com_cart);
+    MPI_Comm_free(& data::domain.comm_cart);
     MPI_Finalize(); 
     return 0;
 }
