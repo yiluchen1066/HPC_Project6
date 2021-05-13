@@ -42,7 +42,6 @@ void SubDomain::init(int mpi_rank, int mpi_size, Discretization& discretization)
     // TODO create a 2D non-periodic cartesian topology using "MPI_Cart_create"
     //create a non-periodic Cartesian topology for the grid of domains
     int reorder = 0;  
-    MPI_Comm comm_cart; 
     MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, reorder, &comm_cart); 
 
     int coords[2];
@@ -56,9 +55,8 @@ void SubDomain::init(int mpi_rank, int mpi_size, Discretization& discretization)
 
     // TODO set neighbours for all directions using "MPI_Cart_shift" 
     // i.e. set neighbour_south neighbour_north neighbour_east neighbour_west
-    int neighbour_north, neighbour_south, neighbour_left, neighbour_right; 
     MPI_Cart_shift(comm_cart, 1, 1, &neighbour_west, &neighbour_east); 
-    MPI_Cart_shift(comm_cart, 0, 1, & neighbour_north, &neighbour_south); 
+    MPI_Cart_shift(comm_cart, 0, 1, &neighbour_north, &neighbour_south); 
 
     // get bounding box
     nx = discretization.nx / ndomx;
