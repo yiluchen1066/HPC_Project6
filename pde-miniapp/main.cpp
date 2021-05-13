@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
     MPI_Init(&argc,&argv); 
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size); 
-    MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &threadLevelProvided); // initialize the MPI execution environment
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_SERIALIZED, &threadLevelProvided); // initialize the MPI execution environment
 
     if (threadLevelProvided<MPI_THREAD_MULTIPLE)
     {
