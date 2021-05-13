@@ -39,7 +39,7 @@ void diffusion(const data::Field &s, data::Field &f)
     using data::y_old;
 
     MPI_Request request[8];
-    MPI_Status status[8];
+    int count; 
 
     double alpha = options.alpha;
     double beta = options.beta;
@@ -62,8 +62,8 @@ void diffusion(const data::Field &s, data::Field &f)
         {
             buffN[i] = s(i,0); 
         }
-        MPI_Isend(&buffN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[0]); 
-        MPI_Irecv(&bndN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[1]); 
+        MPI_Isend(&buffN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[count++]); 
+        MPI_Irecv(&bndN[0], nx, MPI_DOUBLE, domain.neighbour_north, 0, domain.comm_cart, &request[count++]); 
     }
 
     if(domain.neighbour_south>=0) {
@@ -77,8 +77,8 @@ void diffusion(const data::Field &s, data::Field &f)
        {
            buffS[i] = s(i, jend); 
        }
-       MPI_Isend(&buffS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[2]); 
-       MPI_Irecv(&bndS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[3]); 
+       MPI_Isend(&buffS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[count++]); 
+       MPI_Irecv(&bndS[0], nx, MPI_DOUBLE, domain.neighbour_south, 0, domain.comm_cart, &request[count++]); 
     }
 
     if(domain.neighbour_east>=0) {
@@ -89,8 +89,8 @@ void diffusion(const data::Field &s, data::Field &f)
       {
           buffE[j] = s(iend,j); 
       }
-      MPI_Isend(&buffE[0], ny, MPI_DOUBLE, domain.neighbour_east, 0, domain.comm_cart, &request[4]); 
-      MPI_Irecv(&bndE[0], ny, MPI_DOUBLE, domain.neighbour_east, 0, domain.comm_cart, &request[5]); 
+      MPI_Isend(&buffE[0], ny, MPI_DOUBLE, domain.neighbour_east, 0, domain.comm_cart, &request[count++]); 
+      MPI_Irecv(&bndE[0], ny, MPI_DOUBLE, domain.neighbour_east, 0, domain.comm_cart, &request[count++]); 
     }
 
     if(domain.neighbour_west>=0) {
@@ -99,11 +99,16 @@ void diffusion(const data::Field &s, data::Field &f)
       {
           buffW[j]=s(0,j); 
       }
-      MPI_Isend(&buffW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[6]); 
-      MPI_Irecv(&bndW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[7]); 
+      MPI_Isend(&buffW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[count++]); 
+      MPI_Irecv(&bndW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[count++]); 
     }
 
-    MPI_Waitall(8, request, status); 
+    if (domain.size>1)
+    {
+        MPI_Waitall(count, request, MPI_STATUS_IGNORE); 
+    }
+    
+    
 
     // the interior grid points
     for (int j=1; j < jend; j++) {
