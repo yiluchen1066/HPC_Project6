@@ -140,8 +140,8 @@ int main(int argc, char* argv[])
     // TODO initialize
     // use "MPI_Comm_size", "MPI_Comm_rank" and "MPI_Init_thread"
     MPI_Init(&argc,&argv); 
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size); 
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size); 
     MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &threadLevelProvided); // initialize the MPI execution environment
 
     if (threadLevelProvided<MPI_THREAD_MULTIPLE)
@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
         printf("The threading support level is lesser than that demanded.\n"); 
     } else
     {
-        printf("The threading support level correponds to that demanded.\n")
+        printf("The threading support level correponds to that demanded.\n"); 
     }
 
     // initialize subdomain
