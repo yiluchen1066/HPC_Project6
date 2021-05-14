@@ -17,16 +17,18 @@ print(f"In 2d topology, processor {rank} has neighbors: {West}, {East}, {North},
 # exchange its rank with the four east/west/north/south neighbor
 # Numpy array are communicated with very little overhead 
 # but only with upper case methods
+rankb=numpy.array(int(rank))
 West_rank = numpy.array(1)
 East_rank = numpy.array(1)
 North_rank = numpy.array(1)
 South_rank = numpy.array(1)
 # requests= numpy.zeros((1,4))
 
-req = comm.Sendrecv(rank, dest=West, recvbuf=West_rank, source=West)
+req=comm.Sendrecv(rankb, dest=West, recvbuf=West_rank, source=West)
 #req = comm.Sendrecv(rank, dest=East, recvbuf=East_rank, source=East)
 #req = comm.Sendrecv(rank, dest=North, recvbuf=North_rank, source=North)
 #req = comm.Sendrecv(rank, dest=South, recvbuf=South_rank, source = South)
-#MPI.Request.waitall(req)
+MPI.Request.waitall(req)
 
-print(f"Processor {rank} receives their neighbors rank {West_rank,} {East_rank}, {North_rank}, {South_rank}.")
+print(f"Processor {rank} receives their neighbors rank {West_rank,} .")
+
