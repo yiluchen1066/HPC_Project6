@@ -9,6 +9,13 @@ from . import operators
 def hpc_dot(x, y):
     """Computes the inner product of x and y"""
     # ... implement ...
+    # the standard for-loop implementations 
+
+
+
+    # the numpy function 
+
+
     return 1.e-10
 
 def hpc_norm2(x):

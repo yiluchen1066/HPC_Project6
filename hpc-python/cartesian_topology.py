@@ -17,16 +17,16 @@ print(f"In 2d topology, processor {rank} has neighbors: {West}, {East}, {North},
 # exchange its rank with the four east/west/north/south neighbor
 # Numpy array are communicated with very little overhead 
 # but only with upper case methods
-neighranks = numpy.zeros((1, 4))
+West_rank = numpy.array(1)
+East_rank = numpy.array(1)
+North_rank = numpy.array(1)
+South_rank = numpy.array(1)
 # requests= numpy.zeros((1,4))
-req=comm.Send([rank, MPI.INT], dest=West, tag=0)
-req=comm.Send([rank, MPI.INT], dest=East, tag=0)
-req=comm.Send([rank, MPI.INT], dest=North, tag=0)
-req=comm.Send([rank, MPI.INT], dest=South, tag=0)
-req=comm.Recv([neighranks[0], MPI.INT],source=West, tag=0)
-req=comm.Recv([neighranks[1],MPI.INT],source=East, tag=0)
-req=comm.Recv([neighranks[2],MPI.INT], source=North, tag=0)
-req=comm.Recv([neighranks[3],MPI.INT],source=South, tag=0)
+
+req = comm.Sendrecv(rank, dest=West, recvbuf=West_rank, source=West)
+req = comm.Sendrecv(rank, dest=East, recvbuf=East_rank, source=East)
+req = comm.Sendrecv(rank, dest=North, recvbuf=North_rank, source=North)
+req = comm.Sendrecv(rank, dest=South, recvbuf=South_rank, source = South)
 MPI.Request.waitall(req)
 
-print(f"Processor {rank} receives their neighbors rank {neighranks[0]}, {neighranks[1]}, {neighranks[2]}, {neighranks[3]}.")
+print(f"Processor {rank} receives their neighbors rank {West_rank,} {East_rank}, {North_rank}, {South_rank}.")
