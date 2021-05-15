@@ -2,7 +2,7 @@
 Collection of linear algebra operations and CG solver
 """
 from mpi4py import MPI
-from numpy import lingalfg as LA
+# from numpy import lingalfg as LA
 import numpy as np
 from . import data
 from . import operators
