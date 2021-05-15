@@ -18,8 +18,8 @@ def hpc_dot(x, y):
             z_local[0] += x.inner[i,j]*y.inner[i,j]
     x.domain.comm.Allreduce(z_local, z, op=MPI.SUM)
     # the numpy function 
-    # z = np.dot(x,y)
-    return z
+    #z_local = np.dot(x.inner.flatten(),y)
+    return z[0]
 
 def hpc_norm2(x):
     """Computes the 2-norm of x"""
@@ -30,7 +30,7 @@ def hpc_norm2(x):
         for j in np.arange(0, x.inner.shape[1]):
             sum_local[0] += x.inner[i,j]*x.inner[i,j]
     x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
-    return np.sqrt(sum)
+    return np.sqrt(sum)[0]
     # the numpy function 
     # return LA.norm(x)
 
