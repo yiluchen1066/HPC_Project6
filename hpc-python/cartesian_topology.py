@@ -25,9 +25,9 @@ South_rank = numpy.array(1)
 # requests= numpy.zeros((1,4))
 
 comm.Sendrecv(rankb, dest=West, recvbuf=East_rank, source=East)
-comm.Sendrecv(rank, dest=East, recvbuf=West_rank, source=West)
-comm.Sendrecv(rank, dest=North, recvbuf=South_rank, source=South)
-comm.Sendrecv(rank, dest=South, recvbuf=North_rank, source = North)
+comm.Sendrecv(rankb, dest=East, recvbuf=West_rank, source=West)
+comm.Sendrecv(rankb, dest=North, recvbuf=South_rank, source=South)
+comm.Sendrecv(rankb, dest=South, recvbuf=North_rank, source = North)
 # MPI.Request.waitall(req)
 
 print(f"Processor {rank} receives their neighbors rank {West_rank,}  {East_rank,} {North_rank,} {South_rank,}.")
