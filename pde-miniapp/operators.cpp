@@ -103,6 +103,8 @@ void diffusion(const data::Field &s, data::Field &f)
       MPI_Irecv(&bndW[0], ny, MPI_DOUBLE, domain.neighbour_west, 0, domain.comm_cart, &request[count++]); 
     }
 
+    //? position 
+
     if (domain.size>1)
     {
         MPI_Waitall(count, request, MPI_STATUS_IGNORE); 

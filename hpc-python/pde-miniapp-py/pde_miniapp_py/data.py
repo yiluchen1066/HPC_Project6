@@ -275,11 +275,41 @@ class Field:
     def exchange_startall(self):
         """Start exchanging boundary field data"""
         domain = self._domain # copy for convenience
+    
         # ... implement ...
+        iend = domain.local_nx-1
+        jend = domain.local_ny-1
+        req=[]
+        if self._neigh_north >= 0: 
+            for i in [0, domain.local_nx]:
+                self._buffN[i] = self(i, jend)
+            req.append(self._comm.Isend(self._buffN, dest = self._neigh_north))
+            req.append(self._comm.Irecv(self._bdryN, source = self._neigh_north))
+
+        if self._neigh_south >= 0: 
+            for i in [0, domain.local_nx]:
+                self._buffS[i]=self(i,0)
+            req.append(self._comm.Isend(self._buffS, dest = self._neigh_south))
+            req.append(self._comm.Irecv(self._bdryS, source = self._neigh_south))
+        
+        if self._neigh_east >= 0:
+            for j in [0, domain.local_ny]:
+                self._buffE[i] = self(iend, j)
+            req.append(self._comm.Isend(self._buffE, dest= self._neigh_east))
+            req.append(self._comm_Irecv(self._bdryE, source= self._neigh_east))
+
+        if self._neigh_west >= 0:
+            for j in [0, domain.local_ny]:
+                self._buffS[i] = self(0,j)
+            req.append(self._comm.Isend(self._buffW, dest=self._neigh_west))
+            req.append(self._comm_Irecv(self._bdryW, source=self._neigh_west))
+        self.req=req
 
     def exchange_waitall(self):
         """Wait until exchanging boundary field data is complete"""
         # ... implement ...
+        MPI.Request.waitall(self.req)
+
 
     def write_mpiio(self, fname):
         """Write field to file fname with MPI-IO"""

@@ -2,6 +2,7 @@
 Collection of linear algebra operations and CG solver
 """
 from mpi4py import MPI
+from numpy import lingalfg as LA
 import numpy as np
 from . import data
 from . import operators
@@ -10,18 +11,22 @@ def hpc_dot(x, y):
     """Computes the inner product of x and y"""
     # ... implement ...
     # the standard for-loop implementations 
-
-
-
+    z = 0.0
+    for i in np.arange(0, x.size):
+        z += x[i]*y[i]
     # the numpy function 
-
-
-    return 1.e-10
+    # z = np.dot(x,y)
+    return z
 
 def hpc_norm2(x):
     """Computes the 2-norm of x"""
     # ... implement ...
-    return 1.e-10
+    sum = 0.0
+    for i in np.arange(0, x.size):
+        sum += x[i]*x[i]
+    return np.sqrt(sum)
+    # the numpy function 
+    # return LA.norm(x)
 
 class hpc_cg:
     """Conjugate gradient solver class: solve the linear system A x = b"""
