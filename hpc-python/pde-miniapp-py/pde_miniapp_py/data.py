@@ -293,12 +293,12 @@ class Field:
         if domain.neighbour_east >= 0:
             self._buffE=self._inner[iend,:].copy()
             req.append(domain.comm.Isend(self._buffE, dest= domain.neighbour_east))
-            req.append(domain.comm_Irecv(self._bdryE, source= domain.neighbour_east))
+            req.append(domain.comm.Irecv(self._bdryE, source= domain.neighbour_east))
 
         if domain.neighbour_west >= 0:
             self._buffW=self._inner[0,:].copy()
             req.append(domain.comm.Isend(self._buffW, dest=domain.neighbour_west))
-            req.append(domain.comm_Irecv(self._bdryW, source=domain.neighbour_west))
+            req.append(domain.comm.Irecv(self._bdryW, source=domain.neighbour_west))
         
         self.req=req
 
