@@ -30,5 +30,6 @@ comm.Sendrecv(rankb, dest=North, recvbuf=South_rank, source=South)
 comm.Sendrecv(rankb, dest=South, recvbuf=North_rank, source = North)
 # MPI.Request.waitall(req)
 
-print(f"Processor {rank} receives their neighbors rank {West_rank,}  {East_rank,} {North_rank,} {South_rank,}.")
+print(f"Processor {rank} receives their neighbors rank {West_rank[0]}  {East_rank[0]} {North_rank[0]} {South_rank[0]}.")
+
 
