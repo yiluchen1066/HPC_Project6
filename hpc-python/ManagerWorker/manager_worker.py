@@ -13,6 +13,12 @@ TAG_TASK      = 1 # task       message tag
 TAG_TASK_DONE = 2 # tasks done message tag
 TAG_DONE      = 3 # done       message tag
 
+#The manager delegates these tasks to the workers. 
+#once the worker is done computing a particular task, 
+# he sends the patch back to the manager 
+# the worker signals to the manager 
+
+
 def manager(comm, tasks):
     """
     The manager.
@@ -28,8 +34,24 @@ def manager(comm, tasks):
     -------
     ... ToDo ...
     """
+    status = MPI.Status()
+    num = np.zeros(comm.size)
+    tasks_done = []
+    for task in tasks:
+        task_done=comm.recv(source = MPI.ANY_SOURCE, tag = TAG_TASK_DONE, status=status)
+        if task_done: 
+            tasks_done += [task_done]
+            num[status.source]+=1
+        comm.send(task, dest=status.source, tag=TAG_TASK)
 
-    pass
+    for i in np.arange(0, comm.size-1):
+        task_done=comm.recv(source = MPI.ANY_SOURCE, tag = TAG_TASK_DONE, status=status)
+        if task_done: 
+            tasks_done += [task_done]
+            num[status.source]+=1
+        comm.send(None, dest=status.source, tag=TAG_DONE)
+
+    return tasks_done, num
 
 def worker(comm):
 
@@ -41,7 +63,16 @@ def worker(comm):
     comm : mpi4py.MPI communicator
         MPI communicator
     """
-    pass
+    # send an empty 
+    task = None 
+    status  = MPI.Status()
+    while True:
+        comm.send(task, dest = MANAGER, tag=TAG_TASK_DONE)
+        comm.recv(task, source=MANAGER, tag= MPI.ANY_TAG, status=status)
+        if status.tag == TAG_DONE:
+            break
+        else:
+            task.do_work()
 
 def readcmdline(rank):
     """
@@ -95,27 +126,30 @@ if __name__ == "__main__":
     if my_rank == MANAGER:
         print(f"MPI initialized with {size:5d} processes")
 
-    # read command line arguments
-    nx, ny, ntasks = readcmdline(my_rank)
+        # read command line arguments
+        nx, ny, ntasks = readcmdline(my_rank)
 
-    # start timer
-    timespent = - time.perf_counter()
+        # start timer
+        timespent = - time.perf_counter()
 
-    # trying out ... YOUR MANAGER-WORKER IMPLEMENTATION HERE ...
-    x_min = -2.
-    x_max  = +1.
-    y_min  = -1.5
-    y_max  = +1.5
-    M = mandelbrot(x_min, x_max, nx, y_min, y_max, ny, ntasks)
-    tasks = M.get_tasks()
-    for task in tasks:
-        task.do_work()
-    m = M.combine_tasks(tasks)
-    plt.imshow(m.T, cmap="gray", extent=[x_min, x_max, y_min, y_max])
-    plt.savefig("mandelbrot.png")
+        # trying out ... YOUR MANAGER-WORKER IMPLEMENTATION HERE ...
+    
 
-    # stop timer
-    timespent += time.perf_counter()
+        x_min = -2.
+        x_max  = +1.
+        y_min  = -1.5
+        y_max  = +1.5
+        M = mandelbrot(x_min, x_max, nx, y_min, y_max, ny, ntasks)
+        tasks = M.get_tasks()
+        tasks,TasksDoneByWorker=manager(comm, tasks)
+        m = M.combine_tasks(tasks)
+        plt.imshow(m.T, cmap="gray", extent=[x_min, x_max, y_min, y_max])
+        plt.savefig("mandelbrot.png")
+
+        # stop timer
+        timespent += time.perf_counter()
+    else:
+        worker(comm)
 
     # inform that done
     if my_rank == MANAGER:

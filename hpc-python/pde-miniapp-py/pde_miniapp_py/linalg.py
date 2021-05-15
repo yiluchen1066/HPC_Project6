@@ -11,9 +11,11 @@ def hpc_dot(x, y):
     """Computes the inner product of x and y"""
     # ... implement ...
     # the standard for-loop implementations 
-    z = 0.0
+    z_local = 0.0
+    z=0.0
     for i in np.arange(0, x.size):
-        z += x[i]*y[i]
+        z_local += x[i]*y[i]
+    x.domain.comm.Allreduce(z_local, z, op=MPI.SUM)
     # the numpy function 
     # z = np.dot(x,y)
     return z
@@ -21,10 +23,13 @@ def hpc_dot(x, y):
 def hpc_norm2(x):
     """Computes the 2-norm of x"""
     # ... implement ...
+    sum_local = 0.0
     sum = 0.0
     for i in np.arange(0, x.size):
-        sum += x[i]*x[i]
+        sum_local += x[i]*x[i]
+    x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
     return np.sqrt(sum)
+
     # the numpy function 
     # return LA.norm(x)
 
