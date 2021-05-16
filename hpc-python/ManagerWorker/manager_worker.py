@@ -39,7 +39,6 @@ def manager(comm, tasks):
     tasks_done = []
 
     for task in tasks:
-        print(task)
         task_done=comm.recv(source = MPI.ANY_SOURCE, tag = TAG_TASK_DONE, status=status)
         if task_done: 
             tasks_done += [task_done]
