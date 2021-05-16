@@ -47,7 +47,7 @@ void diffusion(const data::Field &s, data::Field &f)
         request[i] = MPI_REQUEST_NULL; 
     }
     
-    int count; 
+    int count=0; 
 
     double alpha = options.alpha;
     double beta = options.beta;
@@ -128,7 +128,7 @@ void diffusion(const data::Field &s, data::Field &f)
 
     // TODO: wait on the receives from the outstanding MPI_Irecv using MPI_Waitall.
     // ...
-
+    // computation and communication overlap
     if (domain.size>1)
     {
         MPI_Waitall(count, request, MPI_STATUS_IGNORE); 
