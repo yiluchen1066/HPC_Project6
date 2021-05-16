@@ -1,6 +1,6 @@
 # by default select gcc
 CXX=mpicxx
-CXXFLAGS=-O3 -fopenmp
+CXXFLAGS=-O3 -fopenmp -g
 
 # if on a cray system, set flags according to the compilation enviroment
 ifeq ($(PE_ENV),GNU)
