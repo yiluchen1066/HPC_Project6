@@ -35,7 +35,7 @@ def manager(comm, tasks):
     ... ToDo ...
     """
     status = MPI.Status()
-    num = np.zeros(comm.size)
+    num = np.zeros(comm.size,'i')
     tasks_done = []
 
     for task in tasks:
