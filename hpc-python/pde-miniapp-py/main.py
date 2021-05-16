@@ -118,7 +118,9 @@ if __name__ == "__main__":
         
 
     # print some domain decomposition specifics
-    domain.print()
+    if not TEST:
+        domain.print()
+    
 
     # allocate global fields
     s_old  = data.Field(domain)
