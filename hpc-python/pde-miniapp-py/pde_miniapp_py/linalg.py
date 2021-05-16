@@ -33,7 +33,7 @@ def hpc_norm2(x):
     #x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
     
     # the numpy function 
-    sum_local[0] = np.dot(x.inner.flat(),x.inner.flat())
+    sum_local[0] = np.dot(x.inner.flat,x.inner.flat)
     x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
     #return LA.norm(x)
     return np.sqrt(sum)[0]
