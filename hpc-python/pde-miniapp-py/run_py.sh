@@ -10,7 +10,7 @@ do
     p=1
     while [ $p -le 32 ]
     do
-        mpirun -np $p python3 main.py $n 100 0.005 | tee -a $fname.data
+        mpirun python3 -np $p main.py $n 100 0.005 | tee -a $fname.data
         ((p+=1))
     done 
     ((n*=2))
