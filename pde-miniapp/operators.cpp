@@ -38,7 +38,15 @@ void diffusion(const data::Field &s, data::Field &f)
 
     using data::y_old;
 
+    //declaration of MPI_request
+
     MPI_Request request[8];
+    //initialization of MPI_request
+    for (int i = 0; i < 8; i++)
+    {
+        request[i] = MPI_REQUEST_NULL; 
+    }
+    
     int count; 
 
     double alpha = options.alpha;
