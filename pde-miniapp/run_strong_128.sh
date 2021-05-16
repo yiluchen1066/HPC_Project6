@@ -11,3 +11,4 @@ mpirun -n 12 ./main 128 100 0.005
 mpirun -n 16 ./main 128 100 0.005
 
 mpirun -n 32 ./main 128 100 0.005 
+
