@@ -105,11 +105,6 @@ void diffusion(const data::Field &s, data::Field &f)
 
     //? position 
 
-    if (domain.size>1)
-    {
-        MPI_Waitall(count, request, MPI_STATUS_IGNORE); 
-    }
-    
     
 
     // the interior grid points
@@ -125,6 +120,12 @@ void diffusion(const data::Field &s, data::Field &f)
 
     // TODO: wait on the receives from the outstanding MPI_Irecv using MPI_Waitall.
     // ...
+
+    if (domain.size>1)
+    {
+        MPI_Waitall(count, request, MPI_STATUS_IGNORE); 
+    }
+    
 
     // the east boundary
     {
