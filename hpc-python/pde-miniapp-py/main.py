@@ -81,6 +81,7 @@ def write_output(fname, field, timestep, time, timetable="timetable.txt",
 
 if __name__ == "__main__":
     # read cmmand line arguments
+    TEST = True
     options, verbose_output = readcmdline()
 
     # get COMM_WORLD communicator, size & rank
@@ -97,18 +98,24 @@ if __name__ == "__main__":
     tolerance = 1.e-6
     skip = 10 # write output every skip time step (or just last if skip < 1)
 
+   
+
     if rank == 0:
-        print(80*"=")
-        print('{:^80}'.format("Welcome to mini-stencil!"))
-        print("version   :: MPI Python")
-        print(f"mesh      :: {options.nx:4d} x {options.ny:4d},",
-              f"dx = {options.dx:f}, dy = {options.dy:f}")
-        print("time      :: {nt:4d} time steps from 0 to {time:f}"
-             .format(nt=options.nt, time=options.nt*options.dt))
-        print(f"iteration :: CG {max_cg_iters:d},",
-                            f"Newton {max_newton_iters:d},",
-                            f"tolerance {tolerance:e}")
-        print(80*"=")
+        if TEST:
+            print(f"{options.nx}\t{size}\t", end="")
+        else:
+            print(80*"=")
+            print('{:^80}'.format("Welcome to mini-stencil!"))
+            print("version   :: MPI Python")
+            print(f"mesh      :: {options.nx:4d} x {options.ny:4d},",
+                f"dx = {options.dx:f}, dy = {options.dy:f}")
+            print("time      :: {nt:4d} time steps from 0 to {time:f}"
+                .format(nt=options.nt, time=options.nt*options.dt))
+            print(f"iteration :: CG {max_cg_iters:d},",
+                                f"Newton {max_newton_iters:d},",
+                                f"tolerance {tolerance:e}")
+            print(80*"=")
+        
 
     # print some domain decomposition specifics
     domain.print()
@@ -225,13 +232,16 @@ if __name__ == "__main__":
     timespent += time.perf_counter()
 
     # print table sumarizing results
+    
+        
     if domain.rank == 0:
-        print(f"simulation took {timespent:f} seconds")
-        print(f"{iters_cg:d} conjugate gradient iterations:",
-               "at rate of {:f} iters/second".format(iters_cg/timespent))
-        print(f"{iters_newton:d} newton iterations")
-        print(80*"-")
-
-    if domain.rank == 0:
-        print("=== End of simulation. Goodbye! ===")
+        if TEST:
+            print(f"{iters_newton}\t{iters_cg}\t{timespent:f}\t{iters_cg/timespent}")
+        else:
+            print(f"simulation took {timespent:f} seconds")
+            print(f"{iters_cg:d} conjugate gradient iterations:",
+                "at rate of {:f} iters/second".format(iters_cg/timespent))
+            print(f"{iters_newton:d} newton iterations")
+            print(80*"-")
+            print("=== End of simulation. Goodbye! ===")
 

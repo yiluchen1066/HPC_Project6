@@ -306,7 +306,7 @@ int main(int argc, char* argv[])
     // print table sumarizing results
     if(domain.rank == 0) {
         #ifdef TEST
-        std::cout << iters_newton << "\t" <<iters_cg << "\t" << timespent << std::endl; 
+        std::cout << iters_newton << "\t" <<iters_cg << "\t" << timespent <<"\t"<<float(iters_cg)/timespent<< std::endl; 
         #else
         std::cout << "--------------------------------------------------------------------------------"
                   << std::endl;

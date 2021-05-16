@@ -1,6 +1,6 @@
-mpirun python3 -n 1 main.py 128 100 0.005
+mpirun -np 1 python3 main.py 128 100 0.005
 
-mpirun python3 -n 2 main.py 128 100 0.005
+mpirun -np 1 python3 main.py 128 100 0.005
 
 mpirun python3 -n 4 main.py 128 100 0.005
 
