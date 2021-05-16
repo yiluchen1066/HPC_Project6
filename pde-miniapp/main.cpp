@@ -156,7 +156,10 @@ int main(int argc, char* argv[])
 
     // initialize subdomain
     domain.init(mpi_rank, mpi_size, options);
-    domain.print();
+    #ifndef TEST:
+
+        domain.print();
+    #endif
 
     int nx = domain.nx;
     int ny = domain.ny;
