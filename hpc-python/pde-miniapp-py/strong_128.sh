@@ -1,13 +1,13 @@
-mpirun -n 1 python3 main.py 128 100 0.005
+mpirun python3 -n 1 main.py 128 100 0.005
 
-mpirun -n 2 python3 main.py 128 100 0.005
+mpirun python3 -n 2 main.py 128 100 0.005
 
-mpirun -n 4 python3 main.py 128 100 0.005
+mpirun python3 -n 4 main.py 128 100 0.005
 
-mpirun -n 8 python3 main.py 128 100 0.005
+mpirun python3 -n 8 main.py 128 100 0.005
 
-mpirun -n 12 python3 main.py 128 100 0.005
+mpirun python3 -n 12 main.py 128 100 0.005
 
-mpirun -n 16 python3 main.py 128 100 0.005
+mpirun python3 -n 16 main.py 128 100 0.005
 
-mpirun -n 32 python3 main.py 128 100 0.005 
+mpirun python3 -n 32 main.py 128 100 0.005

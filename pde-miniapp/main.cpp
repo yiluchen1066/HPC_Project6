@@ -30,6 +30,8 @@ using namespace linalg;
 using namespace operators;
 using namespace stats;
 
+#define TEST
+
 // ==============================================================================
 void write_binary(std::string fname, Field &u, SubDomain &domain, Discretization &options)
 {
@@ -167,6 +169,9 @@ int main(int argc, char* argv[])
     double tolerance     = 1.e-6;
 
     if( domain.rank == 0 ) {
+        #ifdef TEST
+        std::cout << options.nx << "\t" << mpi_size << "\t"; 
+        #else
         std::cout << "========================================================================" << std::endl;
         std::cout << "                      Welcome to mini-stencil!" << std::endl;
         std::cout << "version   :: MPI : " << domain.size << " MPI ranks" << std::endl;
@@ -176,6 +181,7 @@ int main(int argc, char* argv[])
                                      << ", Newton "    << max_newton_iters
                                      << ", tolerance " << tolerance << std::endl;;
         std::cout << "========================================================================" << std::endl;
+        #endif
     }
 
     // allocate global fields
@@ -299,6 +305,9 @@ int main(int argc, char* argv[])
 
     // print table sumarizing results
     if(domain.rank == 0) {
+        #ifdef TEST
+        std::cout << iters_newton << "\t" <<iters_cg << "\t" << timespent << std::endl; 
+        #else
         std::cout << "--------------------------------------------------------------------------------"
                   << std::endl;
         std::cout << "simulation took " << timespent << " seconds" << std::endl;
@@ -307,10 +316,13 @@ int main(int argc, char* argv[])
         std::cout << iters_newton << " newton iterations" << std::endl;
         std::cout << "--------------------------------------------------------------------------------"
                   << std::endl;
+        #endif
     }
 
+    #ifndef TEST
     if(domain.rank==0)
         std::cout << "Goodbye!" << std::endl;
+    #endif
 
     // TODO finalize it using "MPI_Finalize" and "MPI_Comm_free"
     MPI_Comm_free(& domain.comm_cart);
