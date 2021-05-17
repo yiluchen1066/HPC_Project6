@@ -1,6 +1,6 @@
 #!/bin/bash
 
-fname="1node__weak_mem1024"
+fname="nnode__weak_mem1024"
 lscpu | grep "Model name" | tee $fname.data
 echo -e "size\tnp\tNewton\tCG\ttime\titers_cg/timespent" | tee -a $fname.data
 
