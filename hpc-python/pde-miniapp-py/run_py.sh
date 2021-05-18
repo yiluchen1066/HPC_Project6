@@ -5,7 +5,7 @@ lscpu | grep "Model name" | tee $fname.data
 echo -e "size\tnp\tNewton\tCG\ttime\titers_cg/timespent" | tee -a $fname.data
 
 n=128
-while [ $n -le 128 ]
+while [ $n -le 1024 ]
 do
     p=1
     while [ $p -le 32 ]
