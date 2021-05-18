@@ -8,10 +8,10 @@ n=128
 while [ $n -le 1024 ]
 do
     p=1
-    while [ $p -le 32 ]
+    while [ $p -le 64 ]
     do
         mpirun -np $p python3 main.py $n 100 0.005 | tee -a $fname.data
-        ((p+=1))
+        ((p*=4))
     done 
     ((n*=2))
 done
