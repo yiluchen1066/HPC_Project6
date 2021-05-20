@@ -8,10 +8,10 @@ n=128
 while [ $n -le 1024 ]
 do
     p=1
-    while [ $p -le 64 ]
+    while [ $p -le 32 ]
     do
         mpirun -np $p ./main $n 100 0.005 | tee -a $fname.data
-        ((p*=4))
+        ((p+=1))
     done 
     ((n*=2))
 done
