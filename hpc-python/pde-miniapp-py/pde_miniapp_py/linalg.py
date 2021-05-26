@@ -13,13 +13,13 @@ def hpc_dot(x, y):
     # the standard for-loop implementations 
     z_local = np.zeros(1)
     z=np.zeros(1)
-    #for i in np.arange(0, x.inner.shape[0]):
-    #    for j in np.arange(0,x.inner.shape[1]):
-    #       z_local[0] += x.inner[i,j]*y.inner[i,j]
-    #x.domain.comm.Allreduce(z_local, z, op=MPI.SUM)
-    # the numpy function 
-    z_local[0]= np.dot(x.inner.flat,y.inner.flat)
+    for i in np.arange(0, x.inner.shape[0]):
+        for j in np.arange(0,x.inner.shape[1]):
+           z_local[0] += x.inner[i,j]*y.inner[i,j]
     x.domain.comm.Allreduce(z_local, z, op=MPI.SUM)
+    # the numpy function 
+    #z_local[0]= np.dot(x.inner.flat,y.inner.flat)
+    #x.domain.comm.Allreduce(z_local, z, op=MPI.SUM)
     return z[0]
 
 def hpc_norm2(x):
@@ -27,14 +27,14 @@ def hpc_norm2(x):
     # ... implement ...
     sum_local = np.zeros(1)
     sum = np.zeros(1)
-    #for i in np.arange(0, x.inner.shape[0]):
-    #    for j in np.arange(0, x.inner.shape[1]):
-    #        sum_local[0] += x.inner[i,j]*x.inner[i,j]
-    #x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
+    for i in np.arange(0, x.inner.shape[0]):
+        for j in np.arange(0, x.inner.shape[1]):
+            sum_local[0] += x.inner[i,j]*x.inner[i,j]
+    x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
     
     # the numpy function 
-    sum_local[0] = np.dot(x.inner.flat,x.inner.flat)
-    x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
+    #sum_local[0] = np.dot(x.inner.flat,x.inner.flat)
+    #x.domain.comm.Allreduce(sum_local, sum, op=MPI.SUM)
     #return LA.norm(x)
     return np.sqrt(sum)[0]
 
